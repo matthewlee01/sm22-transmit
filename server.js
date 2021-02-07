@@ -22,8 +22,9 @@ socket.on('connect', () => {
   socket.emit('bike-connect');
 });
 
-// initialize file watcher to send updates to server
+// initialize file watcher & parser to send updates to server
 const fs = require('fs');
+const csvparse = require('csv-parse');
 const DATAFILE = 'dummy.txt';
 
 watch(DATAFILE, (eventType, filename) => {
@@ -33,12 +34,11 @@ watch(DATAFILE, (eventType, filename) => {
       return;
     }
     console.log('detected update');
-    const vals = data.split("\n");
-    console.log(vals);
-    socket.emit('update-data', vals[0], vals[1], vals[2]);
-
-        
+    csvparse(data, (err, rows) => {
+      console.log(rows);
+      socket.emit('update-data', rows);
     });
+  });
 });
 
 
