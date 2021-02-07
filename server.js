@@ -14,6 +14,7 @@ const server = express()
 
 // initialize socket.io websocket
 const URL = 'https://sm22-lt-proto.herokuapp.com';
+// const URL = 'http://localhost:3000';
 const socket = io(URL);
 
 // let the server know that the bike client is connected
@@ -25,7 +26,7 @@ socket.on('connect', () => {
 // initialize file watcher & parser to send updates to server
 const fs = require('fs');
 const csvparse = require('csv-parse');
-const DATAFILE = 'dummy.txt';
+const DATAFILE = '/home/matt/Downloads/analog-data15.csv';
 
 watch(DATAFILE, (eventType, filename) => {
   fs.readFile(DATAFILE, 'utf-8', (err, data) => {
