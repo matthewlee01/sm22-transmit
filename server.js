@@ -27,6 +27,7 @@ socket.on('connect', () => {
 const fs = require('fs');
 const csvparse = require('csv-parse');
 const DATAFILE = '/home/matt/Downloads/analog-data15.csv';
+const MSG_SIZE = 3;
 
 watch(DATAFILE, (eventType, filename) => {
   fs.readFile(DATAFILE, 'utf-8', (err, data) => {
@@ -37,7 +38,8 @@ watch(DATAFILE, (eventType, filename) => {
     console.log('detected update');
     csvparse(data, (err, rows) => {
       console.log(rows);
-      socket.emit('update-data', rows);
+      var cutoff = rows.length-MSG_SIZE-1;
+      socket.emit('update-data', rows.slice(cutoff));
     });
   });
 });
